@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import fakeData from '../../fakeData/products.json';
+import {deleteShoppingCart} from '../../utilities/fakedb'
 import './Shops.css'
 import Products from '../Products/Products';
 import Cart from '../Cart/Cart';
@@ -12,6 +13,10 @@ const Shops = () => {
         const newCart = [...cart,product];
         setCart(newCart)
     }
+    const handleClearCart = () => {
+        setCart([])
+        deleteShoppingCart();
+    }
 
     return (
         <div className='shop-container'>
@@ -21,7 +26,7 @@ const Shops = () => {
                 }
             </div>
             <div>
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart} handleClearCart={handleClearCart}></Cart>
             </div>
         </div>
     );
