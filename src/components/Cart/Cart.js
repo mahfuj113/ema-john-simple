@@ -1,39 +1,45 @@
 import React from 'react';
-import "./Cart.css"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-const Cart = ({cart,handleClearCart,children}) => {
-    // const cart = props.cart
-    // const total = cart.reduce((total,prd)=> total+prd.price,0)
+
+const Cart = (props) => {
+    const cart = props.cart;
+    //console.log(cart);
+    //const total = cart.reduce( (total, prd) => total + prd.price , 0 )
     let total = 0;
-    for (const product of cart) {
-         total = total + product.price
+    for(let i = 0; i< cart.length; i++){
+        const product = cart[i];
+        total = total + product.price * product.quantity;
     }
-    // let shipping = 0;
-    // if(total> 35){
-    //     shipping = 0;
-    // }
-    // else if(total > 15){
-    //     shipping = 4.99;
-    // }
-    // else if(total>0){
-    //     shipping = 12.99;
-    // }
-    const shipping = cart.reduce((shipping,prd) => shipping+prd.shipping,0)
-    const tax = total / 10;
+    let shipping = 0;
+    if(total > 35){
+        shipping = 0;
+    }
+    else if(total > 15){
+        shipping = 4.99;
+    }
+    else if(total > 0){
+        shipping = 12.99
+    }
+
+    const tax = (total / 10).toFixed(2);
+    const grandTotal = (total + shipping + Number(tax)).toFixed(2);
+
+    const formatNumber = num => {
+        const precision = num.toFixed(2);
+        return Number(precision);
+    }
     return (
-        <div className='cart'>
-            <p>Order Summary: {cart.length}</p>
-            <p>Product Price: {total}</p>
-            <p><small>Shipping Cost: {shipping}</small></p>
+        <div>
+            <h4>Order Summary</h4>
+            <p>Items Ordered: {cart.length}</p>
+            <p>Product Price: {formatNumber(total)}</p>
+            <p><small>Shiiping Cost: {shipping}</small></p>
             <p><small>Tax + VAT: {tax}</small></p>
-            <p>Total Price: {total+shipping+tax}</p>
-            <button onClick={handleClearCart} className='btn-clear-cart'>
-                <span>Clear Cart </span>
-                <FontAwesomeIcon icon={faTrashAlt} />
-            </button>
-            {children}
+            <p>Total Price: {grandTotal}</p>
+            <br/>
+            {
+                props.children
+            }
         </div>
     );
 };
